@@ -1,32 +1,33 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 namespace UISupport
 {
     [ExecuteInEditMode]
-    public class SafeAreaLayout : MonoBehaviour
+    public class SafeAreaLayout : UIBehaviour
     {
         Rect appliedRect;
+        bool processing;
 
-        void Awake() { Update(); }
-
-        void InitTransform()
+        protected override void Start()
         {
+            base.Start();
+            UpdateLayout();
+        }
+
+        void ApplySafeArea(Rect safeArea)
+        {
+            processing = true;
+
             var rectTransform = (RectTransform)transform;
+
             rectTransform.anchoredPosition = Vector2.zero;
             rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localScale = Vector3.one;
             rectTransform.localRotation = Quaternion.identity;
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            rectTransform.anchorMin = Vector2.zero;
-            rectTransform.anchorMax = Vector2.one;
-        }
 
-        void ApplySafeArea(Rect safeArea)
-        {
-            InitTransform();
-
-            var rectTransform = (RectTransform)transform;
             var anchorMin = safeArea.position;
             var anchorMax = safeArea.position + safeArea.size;
             anchorMin.x /= Screen.width;
@@ -35,9 +36,11 @@ namespace UISupport
             anchorMax.y /= Screen.height;
             rectTransform.anchorMin = anchorMin;
             rectTransform.anchorMax = anchorMax;
+
+            processing = false;
         }
 
-        void Update()
+        void UpdateLayout()
         {
             var safeArea = SafeAreaResolver.Shared.GetSafeArea();
             if (safeArea != appliedRect)
@@ -45,6 +48,12 @@ namespace UISupport
                 ApplySafeArea(safeArea);
                 appliedRect = safeArea;
             }
+        }
+
+        override protected void OnRectTransformDimensionsChange()
+        {
+            base.OnRectTransformDimensionsChange();
+            if (!processing) UpdateLayout();
         }
 
 #if UNITY_EDITOR
