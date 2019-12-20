@@ -43,6 +43,7 @@ namespace UISupport
         void UpdateLayout()
         {
             var safeArea = SafeAreaResolver.Shared.GetSafeArea();
+
             if (safeArea != appliedRect)
             {
                 ApplySafeArea(safeArea);
@@ -124,6 +125,12 @@ namespace UISupport
 
             new SafeAreaDefinition() {name = "XsMax Portrait", width = 1242, height = 2688, safeArea = new Rect(0, 102, 1242, 2454)},
             new SafeAreaDefinition() {name = "XsMax Landsccape", width = 2688, height = 1242, safeArea = new Rect(132, 63, 2424, 1179)},
+
+            new SafeAreaDefinition() {name = "iPadPro11 Portrait", width = 1668, height = 2388, safeArea = new Rect(0, 40, 1668, 2348)},
+            new SafeAreaDefinition() {name = "iPadPro11 Landscape", width = 2388, height = 1668, safeArea = new Rect(0, 40, 2388, 1628)},
+
+            new SafeAreaDefinition() {name = "iPadPro12.9(2018) Portrait", width = 2048, height = 2732, safeArea = new Rect(0, 40, 2048, 2692)},
+            new SafeAreaDefinition() {name = "iPadPro12.9(2018) Landscape", width = 2732, height = 2048, safeArea = new Rect(0, 40, 2732, 2008)},
         };
 
         public Rect GetSafeArea()
