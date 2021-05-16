@@ -135,6 +135,13 @@ namespace UISupport
 
         public Rect GetSafeArea()
         {
+            // Use the actual safe area rect for the device simulator
+            if(Screen.safeArea.width != Screen.width || Screen.safeArea.height != Screen.height)
+            {
+                return Screen.safeArea;
+            }
+
+            // for Game View
             var safeArea = safeAreas.Find(a => a.width == Screen.width && a.height == Screen.height);
 
             if (safeArea == null)
