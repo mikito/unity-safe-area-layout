@@ -87,12 +87,7 @@ namespace UISupport
             {
                 if (sharedResolver == null)
                 {
-#if UNITY_EDITOR
-                    sharedResolver = new SafeAreaEmulator();
-#else
-
                     sharedResolver = new SafeAreaResolver();
-#endif
                 }
                 return sharedResolver;
             }
@@ -103,24 +98,4 @@ namespace UISupport
             return Screen.safeArea;
         }
     }
-
-#if UNITY_EDITOR
-    public class SafeAreaEmulator : ISafeAreaResolver
-    {
-        public class SafeAreaDefinition
-        {
-            public string name;
-            public int width;
-            public int height;
-            public Rect safeArea;
-        }
-
-        public Rect GetSafeArea()
-        {
-            // Use the actual safe area rect for the device simulator.
-            // If you simulate SafeArea in UnityEditor, you have to change to simulator window.
-            return Screen.safeArea;
-        }
-    }
-#endif
 }
