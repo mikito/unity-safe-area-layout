@@ -8,6 +8,7 @@ namespace UISupport
     public class SafeAreaLayout : UIBehaviour
     {
         Rect appliedRect;
+        Vector2 appliedScreenSize;
         bool processing;
 
         protected override void Start()
@@ -16,7 +17,7 @@ namespace UISupport
             UpdateLayout();
         }
 
-        void ApplySafeArea(Rect safeArea)
+        void ApplySafeArea(Rect safeArea, Vector2 screenSize)
         {
             processing = true;
 
@@ -30,10 +31,10 @@ namespace UISupport
 
             var anchorMin = safeArea.position;
             var anchorMax = safeArea.position + safeArea.size;
-            anchorMin.x /= Screen.width;
-            anchorMin.y /= Screen.height;
-            anchorMax.x /= Screen.width;
-            anchorMax.y /= Screen.height;
+            anchorMin.x /= screenSize.x;
+            anchorMin.y /= screenSize.y;
+            anchorMax.x /= screenSize.x;
+            anchorMax.y /= screenSize.y;
             rectTransform.anchorMin = anchorMin;
             rectTransform.anchorMax = anchorMax;
 
@@ -43,11 +44,13 @@ namespace UISupport
         void UpdateLayout()
         {
             var safeArea = SafeAreaResolver.Shared.GetSafeArea();
+            var screenSize = new Vector2(Screen.width, Screen.height);
 
-            if (safeArea != appliedRect)
+            if (safeArea != appliedRect || screenSize != appliedScreenSize)
             {
-                ApplySafeArea(safeArea);
+                ApplySafeArea(safeArea, screenSize);
                 appliedRect = safeArea;
+                appliedScreenSize = screenSize;
             }
         }
 
